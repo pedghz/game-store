@@ -1,0 +1,95 @@
+{% extends 'playing_area/base.html' %}
+{% load staticfiles %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{% static "authentication/login_css.css" %}">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h3>Your profile:</h3>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+
+                                <form id="register-form" action="" method="post"
+                                      role="form">
+                                    <div class="form-group">
+                                        <input type="text" name="firstname" id="firstname" tabindex="1"
+                                               class="form-control" placeholder="First Name" value="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="text" name="lastname" id="lastname" tabindex="1"
+                                               class="form-control" placeholder="Last Name" value="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h4 type="text" name="username" id="username" style="display: inline">
+                                            Username: </h4>
+                                        <p style="display: inline"> {{ request }} </p>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="email" name="email" id="email" tabindex="1" class="form-control"
+                                               placeholder="Email Address" value="">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <h5 type="text" name="username" id="username">Change your profile password
+                                            here: </h5>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="password" tabindex="2"
+                                               class="form-control" placeholder="Old Password">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input type="password" name="password" id="password" tabindex="2"
+                                               class="form-control" placeholder="New Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="confirm-password" id="confirm-password"
+                                               tabindex="2" class="form-control" placeholder="Confirm Password">
+                                    </div>
+
+                                    <div class="col-sm-6 form-group">
+                                        <div class="row">
+                                            <div style="margin: 5px">
+                                                <input type="submit" name="register-submit" id="update-profile"
+                                                       tabindex="4" class="form-control btn btn-success"
+                                                       value="Update my profile">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 form-group">
+                                        <div class="row">
+                                            <div style="margin: 5px">
+                                                <input type="submit" name="register-submit" id="upgrade-as-developer"
+                                                       tabindex="4" class="form-control btn btn-danger"
+                                                       value="Upgrade me as a developer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

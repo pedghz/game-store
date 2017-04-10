@@ -1,0 +1,170 @@
+{% extends 'playing_area/base.html' %}
+{% load staticfiles %}
+
+{% block body %}
+    <html>
+    <body>
+
+    <iframe id="my_iframe" onload="iframeLoaded()" src="{{ source }}">
+        <p>Your browser does not support iframes.</p>
+    </iframe>
+
+    {{ game }}
+
+    <script type="text/javascript">
+        var iframe_height = 700;
+        var iframe_width = 700;
+
+        $(document).ready(function () {
+            'use strict';
+            $(window).on('message', function (evt) {
+                var origin = evt.origin || evt.originalEvent.origin;
+                var origincheck1 = '{{ source }}';
+                var origincheck2 = '{{ source }}' + '/';
+                var data = evt.originalEvent.data;
+                if (origin != origincheck1 && origin != origincheck2)
+                    return;
+
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+
+                var csrftoken = getCookie('csrftoken');
+
+                function csrfSafeMethod(method) {
+                    // these HTTP methods do not require CSRF protection
+                    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+                }
+
+                $.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                    }
+                });
+
+                if (data.messageType == "LOAD_REQUEST") {
+                    sendAjax(data);
+                }
+                if (data.messageType == "SETTING") {
+                    iframe_height = data.options['height'];
+                    iframe_width = data.options['width'];
+                }
+                if (data.messageType == "SCORE") {
+                    var score = parseFloat(data.score);
+                    if (isNaN(score)) {
+                        message.text = "Invalid Score";
+                        return;
+                    }
+                    sendAjax(data);
+                }
+            });
+        });
+
+        function sendAjax(data) {
+            var message = {};
+            if (data.messageType == "SCORE")
+                $.ajax({
+                    method: 'POST',
+                    url: '#',
+                    data: data,
+                    success: function (response) {
+                        if (response.error) {
+                            message.messageType = "ERROR";
+                            message.text = 'Could not save score in database.';
+                            sendMessageToGame(message);
+                        }
+                        else {
+                            if (response.result) {
+                                message.messageType = "LOAD";
+                                message.gameState = jQuery.parseJSON(response.result);
+                                sendMessageToGame(message);
+                            } else {
+                                {#                            message.messageType = "ERROR";#}
+                                {#                            message.text = 'Score value is null in database!';#}
+                                {#                            sendMessageToGame(message)#}
+                            }
+                        }
+                    },
+                    error: function (data) {
+                        if (data.error) {
+                            message.messageType = "ERROR";
+                            message.text = 'Error occurred in server!';
+                            sendMessageToGame(message);
+                        }
+                    }
+                });
+            else if (data.messageType == "LOAD_REQUEST")
+                $.ajax({
+                    method: 'POST',
+                    url: '#',
+                    data: data,
+                    success: function (response) {
+                        console.log(response.result);
+                        if (response.error) {
+                            message.messageType = "ERROR";
+                            message.text = 'Could not retrieve game state from database.';
+                            sendMessageToGame(message);
+                        }
+                        else {
+                            if (response.result) {
+                                message.messageType = "LOAD";
+                                message.gameState = response.result;
+                                sendMessageToGame(message);
+                            } else {
+                                message.messageType = "ERROR";
+                                message.text = 'Game state is null in database!';
+                                sendMessageToGame(message)
+                            }
+                        }
+                    },
+                    error: function (data) {
+                        if (data.error) {
+                            message.messageType = "ERROR";
+                            message.text = 'Could not connect to server!';
+                            sendMessageToGame(message);
+                        }
+                    }
+                });
+
+        }
+
+        function sendMessageToGame(message) {
+            var my_iframe = document.getElementById('my_iframe');
+            if (my_iframe) {
+                my_iframe.contentWindow.postMessage(message, "*");
+            }
+            else {
+                alert("Iframe not found!");
+            }
+        }
+
+        function iframeLoaded() {
+            var my_iframe = document.getElementById('my_iframe');
+            if (my_iframe) {
+                my_iframe.height = iframe_height + 20;
+                my_iframe.width = iframe_width + 20;
+            }
+            else {
+                alert("Iframe not found!");
+            }
+        }
+    </script>
+
+    </body>
+    </html>
+{% endblock %}
+

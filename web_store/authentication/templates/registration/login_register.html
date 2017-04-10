@@ -1,0 +1,104 @@
+{% extends 'playing_area/base.html' %}
+{% load staticfiles %}
+{% block body %}
+
+
+    <link rel="stylesheet" href="{% static "authentication/login_css.css" %}">
+    <script src="{% static "authentication/login.js" %}"></script>
+    <div class="container">
+    	<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="panel panel-login">
+					<div class="panel-heading">
+						<div class="row">
+							<div class="col-xs-6">
+								<a href="#" class="active" id="login-form-link">Login</a>
+							</div>
+							<div class="col-xs-6">
+								<a href="#" id="register-form-link">Register</a>
+							</div>
+						</div>
+						<hr>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-lg-12">
+								<form id="login-form" action="/accounts/login/" method="post" role="form" style="display: block;">
+                                    {% csrf_token %}
+                                    {% if error_login == True %}
+                                        <p style="color: red"><strong>* Wrong Username or Password.</strong></p>
+{#                                        {{ error_message }}#}
+                                    {% endif %}
+									<div class="form-group">
+                                        {{ login_form.username }}
+									</div>
+									<div class="form-group">
+                                        {{ login_form.password }}
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+											</div>
+										</div>
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-lg-12">
+												<div class="text-center">
+													<a href="" tabindex="5" class="forgot-password">Forgot Password?</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</form>
+								<form id="register-form" action="/accounts/register/" method="post" role="form" style="display: none;">
+                                    {% csrf_token %}
+                                    {% if error_register == True %}
+{#                                        <p style="color: red"><strong>* Different .</strong></p>#}
+                                        <script>
+                                            $("#register-form").delay(100).fadeIn(100);
+                                            $("#login-form").fadeOut(100);
+                                            $('#login-form-link').removeClass('active');
+                                            $(this).addClass('active');
+                                            e.preventDefault();
+                                        </script>
+                                        {{ error_message }}
+                                    {% endif %}
+									<div class="form-group">
+                                        {{ register_form.first_name_reg }}
+									</div>
+                                    <div class="form-group">
+                                        {{ register_form.last_name_reg }}
+									</div>
+                                    <div class="form-group">
+                                        {{ register_form.username_reg }}
+									</div>
+									<div class="form-group">
+                                        {{ register_form.email_reg }}
+									</div>
+                                    <div class="form-group">
+                                        {{ register_form.email_reg_confirm }}
+									</div>
+									<div class="form-group">
+                                        {{ register_form.password_reg }}
+									</div>
+									<div class="form-group">
+                                        {{ register_form.password_reg_confirm }}
+									</div>
+									<div class="form-group">
+										<div class="row">
+											<div class="col-sm-6 col-sm-offset-3">
+												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+											</div>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+        </div>
+    </div>
+{% endblock body %}
