@@ -104,15 +104,15 @@ class RegisterForm(forms.Form):
 
 class AddGame(forms.Form):
     genre_choices = (
-        ('ac', 'Action'),
-        ('ad', 'Adventure'),
-        ('bo', 'Board games'),
-        ('pu', 'Puzzle'),
-        ('rp', 'Role playing'),
-        ('sm', 'Simulation'),
-        ('st', 'Strategy'),
-        ('sp', 'Sports'),
-        ('ot', 'Other'),
+        ('Action', 'Action'),
+        ('Adventure', 'Adventure'),
+        ('Board games', 'Board games'),
+        ('Puzzle', 'Puzzle'),
+        ('Role playing', 'Role playing'),
+        ('Simulation', 'Simulation'),
+        ('Sports', 'Sports'),
+        ('Strategy', 'Strategy'),
+        ('Other', 'Other'),
     )
 
     game_name = forms.CharField(label="Game Name", max_length=30, widget=forms.TextInput(
@@ -130,12 +130,12 @@ class AddGame(forms.Form):
                'id': "game_url",
                'class': "form-control",
                'placeholder': 'Game URL'}))
-    image_url = forms.URLField(label="ImageURL", max_length=150, widget=forms.URLInput(
+    image_url = forms.URLField(label="ImageURL", max_length=150, required=False, widget=forms.URLInput(
         attrs={'name': "image_url",
                'id': "image_url",
                'class': 'form-control',
                'placeholder': "Game's image"}))
-    genre = forms.ChoiceField(label="Genre", choices=genre_choices, initial='ac')
+    genre = forms.ChoiceField(label="Genre", choices=genre_choices, initial='Action')
 
     def clean(self):
         cleaned_data = super(AddGame, self).clean()

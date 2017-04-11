@@ -6,6 +6,7 @@
     <title>Game store</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "playing_area/base_css.css" %}">
 {#    <link rel="stylesheet" href="{% static "playing_area/login_css.css" %}">#}
@@ -33,27 +34,25 @@
                 <ul class="nav navbar-nav">
                     <li><a href="/">Home</a></li>
                     <li><a href="/gameslist">All Games</a></li>
-                    {#        <li><a href="#">Deals</a></li>#}
-                    {#        <li><a href="#">Stores</a></li>#}
                     <li><a href="/aboutus">About Us</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {% if not user_is_authenticated %}
                     <li><a href="/accounts/"><span class="glyphicon glyphicon glyphicon-log-in"></span> Login</a></li>
-                    <li><a href="/cart"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li><a href="/accounts/add_game"><span class="glyphicon glyphicon "></span>+ Add game</a></li>
+                    <li><a href="/accounts/my_profile"><span class="glyphicon glyphicon "></span> Your Account</a></li>
+                    <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 </div>
 
-
 {% block body %}
-{#    {% block content %} {% endblock %}#}
 {% endblock %}
-
-{#{% block body_login %}#}
-{#    {% block content %} {% endblock %}#}
-{#{% endblock %}#}
 
 </body>
 </html>

@@ -9,8 +9,6 @@
         <p>Your browser does not support iframes.</p>
     </iframe>
 
-    {{ game }}
-
     <script type="text/javascript">
         var iframe_height = 700;
         var iframe_width = 700;
@@ -71,36 +69,37 @@
                     }
                     sendAjax(data);
                 }
+                if (data.messageType == "SAVE") {
+                    var score = parseFloat(data.score);
+                    var gameState = data.gameState;
+                    if (isNaN(score) && gameState != null) {
+                        message.text = "Invalid data for saving game";
+                        return;
+                    }
+                    sendAjax(data);
+                }
             });
         });
 
         function sendAjax(data) {
             var message = {};
+{#            console.log(data)#}
             if (data.messageType == "SCORE")
                 $.ajax({
                     method: 'POST',
                     url: '#',
                     data: data,
                     success: function (response) {
+{#                        console.log(response.result.result  );#}
                         if (response.error) {
                             message.messageType = "ERROR";
                             message.text = 'Could not save score in database.';
                             sendMessageToGame(message);
                         }
-                        else {
-                            if (response.result) {
-                                message.messageType = "LOAD";
-                                message.gameState = jQuery.parseJSON(response.result);
-                                sendMessageToGame(message);
-                            } else {
-                                {#                            message.messageType = "ERROR";#}
-                                {#                            message.text = 'Score value is null in database!';#}
-                                {#                            sendMessageToGame(message)#}
-                            }
-                        }
                     },
-                    error: function (data) {
-                        if (data.error) {
+                    error: function (response) {
+{#                        console.log(response);#}
+                        if (response.error) {
                             message.messageType = "ERROR";
                             message.text = 'Error occurred in server!';
                             sendMessageToGame(message);
@@ -113,16 +112,17 @@
                     url: '#',
                     data: data,
                     success: function (response) {
-                        console.log(response.result);
+{#                        console.log(response);#}
+                        response.gameState = jQuery.parseJSON(response.gameState)
                         if (response.error) {
                             message.messageType = "ERROR";
                             message.text = 'Could not retrieve game state from database.';
                             sendMessageToGame(message);
                         }
                         else {
-                            if (response.result) {
+                            if (response) {
                                 message.messageType = "LOAD";
-                                message.gameState = response.result;
+                                message.gameState = response.gameState;
                                 sendMessageToGame(message);
                             } else {
                                 message.messageType = "ERROR";
@@ -135,6 +135,28 @@
                         if (data.error) {
                             message.messageType = "ERROR";
                             message.text = 'Could not connect to server!';
+                            sendMessageToGame(message);
+                        }
+                    }
+                });
+            else if (data.messageType == "SAVE")
+                data.gameState= JSON.stringify(data.gameState);
+                $.ajax({
+                    method: 'POST',
+                    url: '#',
+                    data: data,
+                    success: function (response) {
+{#                        console.log( response.result);#}
+                        if (response.error) {
+                            message.messageType = "ERROR";
+                            message.text = 'Could not save game state in database.';
+                            sendMessageToGame(message);
+                        }
+                    },
+                    error: function (data) {
+                        if (data.error) {
+                            message.messageType = "ERROR";
+                            message.text = 'Error occurred in server!';
                             sendMessageToGame(message);
                         }
                     }

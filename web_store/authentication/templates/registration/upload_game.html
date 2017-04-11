@@ -6,55 +6,62 @@
     <link rel="stylesheet" href="{% static "authentication/login_css.css" %}">
     <script src="{% static "authentication/login.js" %}"></script>
     <div class="container">
-    	<div class="row">
-			<div class="col-md-6 col-md-offset-3">
-				<div class="panel panel-login">
-					<div class="panel-heading">
-						<div class="row">
-							<div class="col-xs-12">
-								<h2 class="active" id="add-game-form-heading">Register Your Game</h2>
-							</div>
-						</div>
-						<hr>
-					</div>
-					<div class="panel-body">
-						<div class="row">
-							<div class="col-lg-12">
-								<form id="game-form" action="" method="post" role="form">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h2 class="active" id="add-game-form-heading">Register Your Game</h2>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form id="game-form" action="" method="post" role="form">
                                     {% csrf_token %}
-									<div class="form-group">
+                                    <div class="form-group">
                                         {{ add_game_form.game_name }}
-									</div>
+                                    </div>
                                     <p class="text-danger">
-                                    {% if error_register == True %}
-                                        {{ error_message }}
-                                    {% endif %}
+                                        {% if error_register == 'True' %}
+                                            {{ error_message }}
+                                        {% endif %}
                                     </p>
                                     <div class="form-group">
                                         {{ add_game_form.price }}
-									</div>
+                                    </div>
                                     <div class="form-group">
                                         {{ add_game_form.game_url }}
-									</div>
-									<div class="form-group">
+                                    </div>
+                                    <div class="form-group">
                                         {{ add_game_form.image_url }}
-									</div>
-									<div class="form-group">
+                                    </div>
+                                    <div class="form-group">
                                         <h4>Game's genre:</h4>{{ add_game_form.genre }}
-									</div>
-									<div class="form-group">
-										<div class="row">
-											<div class="col-sm-6 col-sm-offset-3">
-												<input type="submit" name="game-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="SUBMIT GAME">
-											</div>
-										</div>
-									</div>
-								</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="game-submit" id="register-submit"
+                                                       tabindex="4" class="form-control btn btn-register"
+                                                       value="SUBMIT GAME">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-success">
+                                        {% if error_register == 'Sent' %}
+                                            Game has been added to server.
+                                        {% endif %}
+                                    </p>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock body %}

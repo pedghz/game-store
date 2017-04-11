@@ -3,6 +3,10 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from authentication.forms import LoginForm, RegisterForm, AddGame
 from playing_area.models import Game
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from django.conf import settings
+
 
 def login_register_page(request):
     context = {'login_form': LoginForm(), 'register_form': RegisterForm()}
@@ -27,7 +31,7 @@ def login_view(request):
             if user:
                 login(request, user)
                 context['error_login'] = error
-                return render(request, 'playing_area/index.html', context)
+                return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 # An error will be shown.
                 error = True
@@ -38,12 +42,14 @@ def login_view(request):
     else:
         form = LoginForm()
 
+    context['user_is_authenticated'] = request.user.is_authenticated()
     return render(request, 'registration/login_register.html', context)
 
 
 def logout_view(request):
     logout(request)
-    return render(request, 'playing_area/index.html', locals())
+    # return render(request, 'playing_area/index.html', locals())
+    return redirect(settings.LOGIN_REDIRECT_URL)
 
 
 def register_view(request):
@@ -98,7 +104,9 @@ def register_view(request):
     return render(request, 'registration/login_register.html', context)
 
 
+@login_required
 def add_game(request):
+
     context = {'add_game_form': AddGame(request.POST)}
 
     if request.method == "POST":
@@ -120,21 +128,20 @@ def add_game(request):
             )
             # try:
             #     obj = Game.objects.get(name=game_name)
-            #     error_register = True
-            #     context['error_register'] = error_register
-            #     context['error_message'] = "<p style='color: red'><strong>* Game's name already exists.</strong></p>"
             # except Game.DoesNotExist:
             #     obj = Game(name=game_name, url=game_url, price=price, image_url=image_url, game_version=game_version, genre=genre)
             #     obj.save()
-            if not created or obj is None:
-                error_register = True
-                context['error_register'] = error_register
+            if not created:
+                context['error_register'] = 'True'
                 context['error_message'] = "***Game's name already exists***"
+            else:
+                context['error_register'] = 'Sent'
         else:
-            error_register = True
-            context['error_register'] = error_register
+            context['error_register'] = 'True'
             context['error_message'] = 'The form is not valid!'
     else:
         form = AddGame()
 
+
+    context['user_is_authenticated'] = request.user.is_authenticated()
     return render(request, 'registration/upload_game.html', context)

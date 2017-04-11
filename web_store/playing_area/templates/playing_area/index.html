@@ -1,60 +1,50 @@
-{% extends user.is_authenticated|yesno:"playing_area/base_logged_in.html,playing_area/base.html" %}
-{% load staticfiles %}
+{% extends 'playing_area/base.html' %}
 
+
+{% load staticfiles %}
 {% block body %}
 
     <div class="page-content">
         <div class="page-inner-content">
 
 
-            {% for g in games_list %}
-                <div class="container">
-                    <div class="row">
+            <div class="container">
+                <div class="row">
+                    {% for g in games_list %}
+                        {% if counter == 3 %}
+                            <div class="container">
+                            <div class="row">
+                        {% endif %}
+                        {% if counter < 3 %}
+                            <p style="display:none">{{ counter|add:"1" }}</p>
+                        {% endif %}
 
                         <div class="col-sm-6">
                             <div class="panel panel-danger">
-                                <div class="panel-heading">Blood Diamond!</div>
+                                <div class="panel-heading"><p id="{{ g.name }}" style="display: inline;">{{ g.name }}</p></div>
                                 <div class="panel-body">
                                     <a href="/playgame/{{ g.name }}">
                                         <img src="{{ g.image_url }}"
                                              class="img-responsive"
                                              style="width:100%" alt="Image"></a>
                                 </div>
-                                <div class="panel-footer">Play the bloodiest game ever!</div>
+                                <div class="panel-footer">
+                                    <p style="display: inline;">Price: {{ g.price }} $</p>
+                                    <p style="float: right; display: inline;">Genre: {{ g.genre }}</p>
+                                </div>
                             </div>
                         </div>
 
-                    </div>
+                        {% if counter == 3 %}
+                            <p style="display:none">{{ counter|add:"-2" }}</p>
+                            </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
                 </div>
-                <br>
-
-                <div class="container">
-                    <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="panel panel-danger">
-                                <div class="panel-heading">BLACK FRIDAY DEAL</div>
-                                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE"
-                                                             class="img-responsive"
-                                                             style="width:100%" alt="Image"></div>
-                                <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-6">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">BLACK FRIDAY DEAL</div>
-                                <div class="panel-body"><img src="https://placehold.it/150x80?text=IMAGE"
-                                                             class="img-responsive"
-                                                             style="width:100%" alt="Image"></div>
-                                <div class="panel-footer">Buy 50 mobiles and get a gift card</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <br><br>
-            {% endfor %}
+            </div>
+            <br>
 
             <footer class="container-fluid text-center">
                 <p>Online JS Game Store</p>
@@ -66,5 +56,15 @@
 
         </div>
     </div>
-
+    {% for g in games_list %}
+        <script>
+            function change_dashes () {
+                var str = document.getElementById("{{ g.name }}").innerHTML;
+                var res = str.charAt(0).toUpperCase() + str.slice(1);
+                res = res.replace(/-/g, " ");
+                document.getElementById("{{ g.name }}").innerHTML = res;
+            }
+            change_dashes();
+        </script>
+    {% endfor %}
 {% endblock body %}
