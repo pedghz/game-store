@@ -1,0 +1,53 @@
+{% extends 'playing_area/base.html' %}
+{% block title %}Your Order{% endblock %}
+{% load staticfiles %}
+{% block body %}
+    <link rel="stylesheet" href="{% static "purchase/ownedGame.css" %}">
+    <div class="container">
+       <h1 class="text-center">Your Order</h1>
+           <hr style="margin-bottom:35px; width:100%; border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">
+
+        {% for i in cart.games %}
+
+            <ul><div id="div-{{ i.id }}" class="divSpace">
+                <div class="purchaseDiv">
+                    <p class="lead gameName">{{ forloop.counter }}. {{ i.name }} <span class="purchasePrice"><script type="text/javascript">document.write(formatPrice("{{ i.price }}"));</script></span></p>
+                </div>
+            </div>
+         <hr style="width: 50%;text-align:left;  margin-left:0;height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1);border-bottom: 1px solid rgba(255, 255, 255, 0.3);">
+            </ul>
+        {% endfor %}
+        <form action="{{ action }}" method="POST" id="purchaseForm">
+            <input type="hidden" name="pid" value="{{ pid }}" />
+            <input type="hidden" name="sid" value="{{ sid }}" />
+            <input type="hidden" name="success_url"
+                    value="{{ success_url }}" />
+            <input type="hidden" name="cancel_url"
+                    value="{{ cancel_url }}" />
+            <input type="hidden" name="error_url"
+                    value="{{ error_url }}" />
+            <input type="hidden" name="checksum"
+                    value="{{ checksum }}" />
+
+            <ul><input type="text" id="id_amount" name="amount" value="{{ amount }}"/>
+            <label for="id_amount" class="alignRight">&#36;  Total Amount</label></ul>
+            <br/>
+            <br/>
+
+            <div class="row">
+                <div class="col-md-3 col-xs-12">
+                    <a href="{% url 'shopping_cart' %}"><button type="button" class="btn btn-primary btn-block"><span class="fa fa-angle-left"></span>
+                    Continue Shopping
+                    </button></a>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    <input type="submit" class="btn btn-success btn-block" value="Pay!"/>
+                </div>
+            </div>
+        </form>
+
+
+    </div>
+
+</div>
+{% endblock %}

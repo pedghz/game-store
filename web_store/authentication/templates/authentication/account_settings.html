@@ -1,0 +1,126 @@
+{% extends 'playing_area/base.html' %}
+{% load staticfiles %}
+{% block body %}
+
+    {# Some Bootstrap stuff. #}
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <link rel="stylesheet" href="{% static "authentication/login_css.css" %}">
+    <script src="{% static "authentication/account_settings.js" %}"></script>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="panel panel-login">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <a href="#" class="active" id="account-settings-form-link">Account Settings</a>
+                            </div>
+                            <div class="col-xs-6">
+                                <a href="#" id="reset-password-form-link">Change Password</a>
+                            </div>
+                        </div>
+                        <hr>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <form id="account-settings-form" action="/accounts/my_profile/" method="post"
+                                      role="form" style="display: block;">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        {{ my_profile_form.username_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ my_profile_form.first_name_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ my_profile_form.last_name_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ my_profile_form.email_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ my_profile_form.is_developer_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="change-data-submit" id="change-data-submit"
+                                                       tabindex="4" class="form-control btn btn-register"
+                                                       value="Apply Changes">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <form id="reset-password-form" action="/accounts/my_profile/reset_password/"
+                                      method="post"
+                                      role="form" style="display: none;">
+                                    {% csrf_token %}
+                                    {% if error_reset == True %}
+                                        <script>
+                                            $("#reset-password-form").delay(100).fadeIn(100);
+                                            $("#account-settings-form").fadeOut(100);
+                                            $('#account-settings-form-link').removeClass('active');
+                                            $(this).addClass('active');
+                                            e.preventDefault();
+                                        </script>
+                                        <p style="color: red"><strong>{{ error_message }}</strong></p>
+                                    {% endif %}
+                                    <div class="form-group">
+                                        {{ reset_password_form.current_password_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ reset_password_form.password_settings }}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ reset_password_form.password_settings_confirm }}
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-sm-offset-3">
+                                                <input type="submit" name="change-password-submit"
+                                                       id="change-password-submit"
+                                                       tabindex="4" class="form-control btn btn-register"
+                                                       value="Change Password">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                {% if dev == 'True' %}
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <a href="/purchase/owned_game">
+                                                <button type="button" class="btn btn-primary btn-block">My Games
+                                                </button>
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-8">
+                                            <a href="/accounts/developer_games/">
+                                                <button type="button" class="btn btn-danger btn-block">Go to my
+                                                    developer Page
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <div class="col-sm-12">
+                                            <a href="/purchase/owned_game">
+                                                <button type="button" class="btn btn-primary btn-block">My Games
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'playing_area/base.html' %}
+{% block title %}Game List{% endblock %}
+{% load staticfiles %}
+
+{% block body %}
+
+
+    <div id="games_list_by_genre">
+        {% include 'playing_area/gameslist_genre.html' %}
+    </div>
+
+    {% for g in games_list %}
+        <script>
+            function change_dashes() {
+                var str = document.getElementById("{{ g.name }}").innerHTML;
+                var res = str.charAt(0).toUpperCase() + str.slice(1);
+                res = res.replace(/-/g, " ");
+                document.getElementById("{{ g.name }}").innerHTML = res;
+            }
+            change_dashes();
+        </script>
+    {% endfor %}
+
+    <script>
+
+        $(function () {
+            "use strict";
+
+            // Bind an event handler that handles clicking any link inside #Genres.
+            $("#Genres a").on("click", function (event) {
+                // Prevent the default behaviour of clicking a link (changing the page).
+                event.preventDefault();
+                // Take the target url from the link that was clicked.
+                var url = $(this).attr("href");
+                // Replace the contents of #games_list_by_genre with HTML
+                // that is dynamically load from the link's target url.
+                $("#games_list_by_genre").load(url);
+            });
+        });
+
+    </script>
+{% endblock body %}

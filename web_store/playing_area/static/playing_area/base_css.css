@@ -1,5 +1,6 @@
 body {
     padding-top: 90px;
+    background:#eee;;
 }
 
 .navbar-brand {
@@ -36,4 +37,26 @@ footer {
 
 p {
     margin: 0;
+}
+
+.img-game {
+    max-height: 280px;
+    min-height: 280px;
+}
+
+.panel-footer {
+    padding: 10px 15px 25px;
+}
+
+#id_account_type {
+    list-style: none;
+    padding-left: 0px;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+.row {
+    margin: 10px;
 }

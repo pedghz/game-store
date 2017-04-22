@@ -226,6 +226,7 @@ function checkStart(e) {
                 },
                 score: diamondsCollected
             },
+            score: diamondsCollected,
         };
         parent.postMessage(message,'*');
         mouseJustClicked = true;
@@ -233,20 +234,21 @@ function checkStart(e) {
 }
 
 function loadGame(data){
-    hero.x = data.playerPos.x;
-    hero.y = data.playerPos.y;
-    ghost1.x = data.ghost1.x;
-    ghost1.y = data.ghost1.y;
-    ghost2.x = data.ghost2.x;
-    ghost2.y = data.ghost2.y;
-    ghost3.x = data.ghost3.x;
-    ghost3.y = data.ghost3.y;
-    ghost4.x = data.ghost4.x;
-    ghost4.y = data.ghost4.y;
-    diamond.x = data.diamond.x;
-    diamond.y = data.diamond.y;
-    diamondsCollected = data.score;
-
+    if (data != "" && data != null) {
+        hero.x = data.playerPos.x;
+        hero.y = data.playerPos.y;
+        ghost1.x = data.ghost1.x;
+        ghost1.y = data.ghost1.y;
+        ghost2.x = data.ghost2.x;
+        ghost2.y = data.ghost2.y;
+        ghost3.x = data.ghost3.x;
+        ghost3.y = data.ghost3.y;
+        ghost4.x = data.ghost4.x;
+        ghost4.y = data.ghost4.y;
+        diamond.x = data.diamond.x;
+        diamond.y = data.diamond.y;
+        diamondsCollected = data.score;
+    }
     mouseJustClicked = true;
 }
 

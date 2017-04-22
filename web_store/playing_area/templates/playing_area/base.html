@@ -3,13 +3,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Game store</title>
+    <title>{% block title %}Game Store{% endblock %}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static "playing_area/base_css.css" %}">
-{#    <link rel="stylesheet" href="{% static "playing_area/login_css.css" %}">#}
+    <!-- for FF, Chrome, Opera -->
+    <link rel="icon" type="image/png" href="{% static "playing_area/images/favicon-16x16.png" %}" sizes="16x16">
+    <link rel="icon" type="image/png" href="{% static "playing_area/images/favicon-32x32.png" %}" sizes="32x32">
+    <!-- for IE -->
+    <link rel="icon" type="image/x-icon" href="{% static "playing_area/images/favicon.ico" %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static "playing_area/images/favicon.ico" %}"/>
+    {#    <link rel="stylesheet" href="{% static "playing_area/login_css.css" %}">#}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
@@ -32,18 +38,32 @@
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
+                    {#                    {% if dev != 'True' %}#}
                     <li><a href="/">Home</a></li>
                     <li><a href="/gameslist">All Games</a></li>
-                    <li><a href="/aboutus">About Us</a></li>
+                    {#                    {% endif %}#}
+                    {#                    <li><a href="/aboutus">About Us</a></li>#}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    {% if not user_is_authenticated %}
-                    <li><a href="/accounts/"><span class="glyphicon glyphicon glyphicon-log-in"></span> Login</a></li>
+                    {% if not user.is_authenticated %}
+                        <li><a href="/accounts/"><span class="glyphicon glyphicon glyphicon-log-in"></span>
+                            Login/Register</a>
+                        </li>
                     {% endif %}
                     {% if user.is_authenticated %}
-                    <li><a href="/accounts/add_game"><span class="glyphicon glyphicon "></span>+ Add game</a></li>
-                    <li><a href="/accounts/my_profile"><span class="glyphicon glyphicon "></span> Your Account</a></li>
-                    <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                        {#                        {% if dev == 'True' %}#}
+                        {#                            <li><a href="/accounts/add_game"><span class="glyphicon glyphicon "></span>+ Add game</a>#}
+                        {#                            </li>#}
+                        {#                        {% endif %}#}
+                        <li><a href="/accounts/my_profile"><span class="glyphicon glyphicon "></span> Your Account</a>
+                        </li>
+                        {#                        {% if dev != 'True' %}#}
+
+                        <li><a href="/purchase/shopping_cart"><span
+                                class="glyphicon glyphicon-shopping-cart"></span>
+                            Cart</a></li>
+                        {#                        {% endif %}#}
+                        <li><a href="/accounts/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                     {% endif %}
                 </ul>
             </div>

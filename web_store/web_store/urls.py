@@ -21,4 +21,5 @@ urlpatterns = [
     url(r'^', include('playing_area.urls')),
     url(r'^accounts/', include('authentication.urls')),
     url(r'^purchase/', include('purchase.urls')),
+    url(r'^', include('api.urls'))
 ]

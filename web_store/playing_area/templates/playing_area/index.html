@@ -1,9 +1,12 @@
 {% extends 'playing_area/base.html' %}
 
+{% block title %}Home Page{% endblock %}
 
 {% load staticfiles %}
 {% block body %}
 
+    <h2  class="text-center">Most Recent Games</h2>
+    <hr style="margin-bottom:35px; width:80%; border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">
     <div class="page-content">
         <div class="page-inner-content">
 
@@ -15,31 +18,43 @@
                             <div class="container">
                             <div class="row">
                         {% endif %}
-                        {% if counter < 3 %}
-                            <p style="display:none">{{ counter|add:"1" }}</p>
-                        {% endif %}
+                    {% if counter < 3 %}
+                        <p style="display:none">{{ counter|add:"1" }}</p>
+                    {% endif %}
 
-                        <div class="col-sm-6">
-                            <div class="panel panel-danger">
-                                <div class="panel-heading"><p id="{{ g.name }}" style="display: inline;">{{ g.name }}</p></div>
-                                <div class="panel-body">
-                                    <a href="/playgame/{{ g.name }}">
-                                        <img src="{{ g.image_url }}"
-                                             class="img-responsive"
-                                             style="width:100%" alt="Image"></a>
-                                </div>
-                                <div class="panel-footer">
-                                    <p style="display: inline;">Price: {{ g.price }} $</p>
-                                    <p style="float: right; display: inline;">Genre: {{ g.genre }}</p>
-                                </div>
+                    <div class="col-sm-6">
+                        <div class="panel panel-danger">
+                            <div class="panel-heading"><p id="{{ g.name }}" style="display: inline;">{{ g.name }}</p>
+                            </div>
+                            <div class="panel-body">
+                                <a href="/playgame/{{ g.name }}">
+                                    {% if g.image_url != '' %}
+                                        <img src="{{ g.image_url }}" class="img-game img-responsive" style="width:100%"
+                                             alt="Image Not Found">
+                                    {% endif %}
+                                    {% if g.image_url == '' %}
+                                        <img src="{% static "playing_area/images/no_image.png" %}"
+                                             class="img-game gameimg-responsive" style="width:100%"
+                                             alt="Not Any Images Found">
+                                    {% endif %}
+                                </a>
+                            </div>
+                            <div class="panel-footer">
+                                <p style="display: inline;">Price: {{ g.price }} $</p>
+                                {% if user.is_authenticated %}
+                                <button class="btn btn-success" style="float: right; display: inline;" type="button"
+                                        onclick="add_game_cart({{ g.id }})">Add to cart
+                                </button>
+                                {% endif %}
                             </div>
                         </div>
+                    </div>
 
-                        {% if counter == 3 %}
-                            <p style="display:none">{{ counter|add:"-2" }}</p>
-                            </div>
-                            </div>
-                        {% endif %}
+                    {% if counter == 3 %}
+                        <p style="display:none">{{ counter|add:"-2" }}</p>
+                        </div>
+                        </div>
+                    {% endif %}
                     {% endfor %}
 
                 </div>
@@ -56,15 +71,89 @@
 
         </div>
     </div>
+    <div id="addModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title">Congrats!</h3>
+                </div>
+                <div class="modal-body">
+                    <form class="form-signin">
+                    <h4 class="form-signin-heading" id="modalResponse"></h4>
+                    </form>
+                </div>
+            </div>
+        </div>
+     </div>
     {% for g in games_list %}
         <script>
-            function change_dashes () {
+            function change_dashes() {
                 var str = document.getElementById("{{ g.name }}").innerHTML;
                 var res = str.charAt(0).toUpperCase() + str.slice(1);
                 res = res.replace(/-/g, " ");
                 document.getElementById("{{ g.name }}").innerHTML = res;
             }
             change_dashes();
+
         </script>
     {% endfor %}
+
+    <script type="text/javascript">
+    function add_game_cart(gameid, element) {
+            $.ajax({
+                method:'POST',
+                url: "{% url 'shopping_cart' %}",
+                data: {
+                    csrfmiddlewaretoken: "{{ csrf_token  }}",
+                    game:gameid,
+                    action:'add'
+                },
+                success:function(data) {
+                    var $addModal = $("#addModal");
+                    if (data.error){
+                        $('#modalResponse').text("There is an error!");
+                        $addModal.removeClass('done info');
+                        $addModal.addClass('error');
+                        $addModal.modal();
+                    }
+                    else{
+
+                        $('#modalResponse').text("Game successfully added to your cart!");
+                        $addModal.removeClass('info error');
+                        $addModal.addClass('done');
+                        $addModal.modal();
+                    }
+                },
+                error: function (data) {
+                    var $addModal = $("#addModal");
+                    if (data.responseJSON && data.responseJSON.error) {
+                        $('#modalResponse').text(data.responseJSON.error);
+                        $addModal.removeClass('done error');
+                        $addModal.addClass('info');
+                        $addModal.modal();
+                    }else if (data.status == 403){
+                        $('#modalResponse').text("You are not allowed to buy this game");
+                        $addModal.removeClass('done info');
+                        $addModal.addClass('error');
+                        $addModal.modal();
+                    } else if (data.status == 400) {
+                        $('#modalResponse').text("Game already in the basket.");
+                        $addModal.removeClass('done error');
+                        $addModal.addClass('info');
+                        $addModal.modal();
+                    } else {
+                        $('#modalResponse').text("An unexpected error has occurred. Please try again later!");
+                        $addModal.removeClass('done error');
+                        $addModal.addClass('info');
+                        $addModal.modal();
+
+                    }
+                }
+            });
+        }
+
+
+
+    </script>
 {% endblock body %}

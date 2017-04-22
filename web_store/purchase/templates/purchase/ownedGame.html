@@ -1,0 +1,45 @@
+{% extends 'playing_area/base.html' %}
+{% block title %}Owned Game{% endblock %}
+{% load staticfiles %}
+{% block body %}
+
+<link rel="stylesheet" href="{% static "purchase/ownedGame.css" %}">
+<div class="container">
+    <h1 class="text-center">My Games</h1>
+        <hr style="margin-bottom:35px; width:100%; border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">
+
+       {% for game in games %}
+    <div class="col-ms-10 col-md-4" >
+        <div class="project">
+            <figure class="img-responsive" >
+                    {% if game.image_url != '' %}
+                        <img src="{{ game.image_url }}" class="img-game img-responsive"
+                             alt="Image Not Found">
+                    {% endif %}
+                    {% if game.image_url == '' %}
+                        <img src="{% static "playing_area/images/no_image.png" %}"
+                             class="img-game gameimg-responsive"
+                             >
+                    {% endif %}
+
+                <figcaption>
+
+                    <span class="project-details"><a href="/playgame/{{ game.name }}"><strong>{{ game.name }}</strong></a></span>
+
+                </figcaption>
+
+                <span class="actions">
+                        <a href="/playgame/{{ game.name }}"><button class="btn btn-warning bnt-action" type="submit"  >View </button></a>
+                </span>
+
+            </figure>
+
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+
+{% endblock %}
+

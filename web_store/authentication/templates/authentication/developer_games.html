@@ -1,0 +1,41 @@
+{% extends 'playing_area/base.html' %}
+{% block title %}Your Game{% endblock %}
+{% load staticfiles %}
+{% block body %}
+    <div class="container">
+        <h1 class="text-center">Developed Games</h1>
+    <hr style="margin-bottom:35px; width:100%; border: 0; height: 1px; background: #333; background-image: linear-gradient(to right, #ccc, #333, #ccc);">
+        <div class="table-responsive" id="myTableContainer">
+            <table class="table table-hover" id="myTable">
+                <thead>
+                <tr>
+                    <th data-field="logo">Logo</th>
+                    <th data-field="name">Name</th>
+                    <th data-field="category">Category</th>
+                    <th data-field="price">Price</th>
+                    <th data-field="popularity">Popularity</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for g in games %}
+                    <tr>
+                        <td><img alt="image not available" class="gameImage" src="{{ g.image_url }}"
+                                 style="width: 150px; height: 150px;"></td>
+                        <td><a href="/playgame/{{ g.name }}">'{{ g.name }}'</a>, edit this game <a href="/accounts/edit-{{ g.name }}">here</a>.</td>
+                        <td>{{ g.genre }}</td>
+                        <td>{{ g.price }}</td>
+                        <td>{{ g.purchased_times }}</td>
+
+                    </tr>
+                {% endfor %}
+                <br>
+                </tbody>
+            </table>
+            <br>
+            <a href="/accounts/add_game" style="text-align: center">
+                <button class="col-sm-6 col-sm-offset-3 btn btn-lg btn-success" data-toggle="modal" data-target="#modalGame">Add a new game</button>
+            </a>
+        </div>
+    </div>
+
+{% endblock %}
