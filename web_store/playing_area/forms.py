@@ -1,5 +1,7 @@
 from django import forms
 
+
+# The search field for searching games' name
 class SearchGame(forms.Form):
     keyword = forms.CharField(label="Search Game", max_length=30, widget=forms.TextInput(
         attrs={'name': "search",
@@ -13,6 +15,7 @@ class SearchGame(forms.Form):
         return cleaned_data
 
 
+# A form for cleaning the ajax requests for score
 class GameScoreForm(forms.Form):
     score = forms.FloatField()
 
@@ -21,6 +24,7 @@ class GameScoreForm(forms.Form):
         return cleaned_data
 
 
+# A form for cleaning the ajax requests for saving
 class GameStateForm(forms.Form):
     score = forms.FloatField(initial=0)
     gameState = forms.CharField(max_length=1500)

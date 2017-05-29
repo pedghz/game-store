@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from . import views
 
 app_name = 'authentication'
@@ -12,5 +12,5 @@ urlpatterns = [
     url(r'^developer_games/$', views.developer_games, name='developer_games'),
     url(r'^my_profile/$', views.my_profile, name="my_profile"),
     url(r'^my_profile/reset_password/$', views.reset_password, name="my_reset_password"),
-    url(r'^edit-[a-zA-Z0-9]+\S*/$', views.edit_game, name='playgame'),
+
 ]

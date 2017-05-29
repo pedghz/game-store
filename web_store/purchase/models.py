@@ -6,10 +6,11 @@ from authentication.models import Profile
 from datetime import datetime
 
 
-
+#creating the date of the
 def get_default_ymd():
     return now().date().strftime("%Y%m%d")
 
+#creating table of order
 class Order(models.Model):
     id=models.AutoField(primary_key=True)
     _player = models.ForeignKey(Profile, null=False)

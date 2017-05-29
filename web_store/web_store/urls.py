@@ -1,3 +1,5 @@
+from django.conf.urls import url, include
+from django.contrib import admin
 """web_store URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -13,13 +15,11 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
-from django.contrib import admin
-
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('playing_area.urls')),
     url(r'^accounts/', include('authentication.urls')),
     url(r'^purchase/', include('purchase.urls')),
-    url(r'^', include('api.urls'))
+    url(r'^', include('api.urls')),
 ]
+

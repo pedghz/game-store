@@ -2,6 +2,7 @@ from django import forms
 
 
 class LoginForm(forms.Form):
+    # This form is used to handle the login process.
     username = forms.CharField(label="Username", max_length=30, widget=forms.TextInput(
         attrs={'name': "username",
                'id': "username",
@@ -30,6 +31,7 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
+    # This form is used to handle the registration process.
     first_name_reg = forms.CharField(label="First Name", max_length=30, widget=forms.TextInput(
         attrs={'name': "first_name_reg",
                'id': "first_name_reg",
@@ -114,7 +116,7 @@ class RegisterForm(forms.Form):
 
 
 class AccountSettings(forms.Form):
-
+    # This form allows the user to modify some account information.
     username_settings = forms.CharField(label="Username", max_length=30, widget=forms.TextInput(
         attrs={'name': "username_settings",
                'id': "username_settings",
@@ -142,6 +144,7 @@ class AccountSettings(forms.Form):
 
 
 class ResetPassword(forms.Form):
+    # This form allows the users to update their password.
     current_password_settings = forms.CharField(label="Password", min_length=6, widget=forms.PasswordInput(
         attrs={'name': "current_password_settings",
                'id': "current_password_settings",
@@ -179,7 +182,9 @@ class ResetPassword(forms.Form):
         return cleaned_data
 
 
+# The form for adding a game
 class AddGame(forms.Form):
+    # we want to offer a dropdown menu for selecting genre of the game he/she is uploading
     genre_choices = (
         ('Action', 'Action'),
         ('Adventure', 'Adventure'),
@@ -190,7 +195,6 @@ class AddGame(forms.Form):
         ('Strategy', 'Strategy'),
         ('Other', 'Other'),
     )
-
     game_name = forms.CharField(label="Game Name", max_length=30, widget=forms.TextInput(
         attrs={'name': "game_name",
                'id': "game_name",
@@ -206,22 +210,26 @@ class AddGame(forms.Form):
                'id': "game_url",
                'class': "form-control",
                'placeholder': 'Game URL'}))
+    # we offer people to put a link to an image which represents their game
     image_url = forms.URLField(label="ImageURL", max_length=150, required=False, widget=forms.URLInput(
         attrs={'name': "image_url",
                'id': "image_url",
                'class': 'form-control',
                'placeholder': "Game's image URL (Best size: 260x140)"}))
+    # the genre dropdown
     genre = forms.ChoiceField(label="Genre", choices=genre_choices, initial='Action')
 
     def clean(self):
         cleaned_data = super(AddGame, self).clean()
-        # transforming the username to lowercase and exchange white spaces with dashes.
+        # transforming the game's name to lowercase and exchange white spaces with dashes.
         game_name = str(cleaned_data.get('game_name')).lower().replace(' ', '-')
         cleaned_data['game_name'] = game_name
         return cleaned_data
 
 
+# The form for editing a game
 class EditGame(forms.Form):
+    # data the genre dropdown
     genre_choices = (
         ('Action', 'Action'),
         ('Adventure', 'Adventure'),
@@ -232,7 +240,7 @@ class EditGame(forms.Form):
         ('Strategy', 'Strategy'),
         ('Other', 'Other'),
     )
-
+    # The game's name is unique in our db and it cannot be changed.
     game_name_edit = forms.CharField(label="Game Name", max_length=30, widget=forms.TextInput(
         attrs={'name': "game_name",
                'id': "game_name",
@@ -254,6 +262,7 @@ class EditGame(forms.Form):
                'id': "image_url",
                'class': 'form-control',
                'placeholder': "Game's image URL (Best size: 260x140)"}))
+    # genre dropdown
     genre_edit = forms.ChoiceField(label="Genre", choices=genre_choices, initial='Action')
 
     def clean(self):

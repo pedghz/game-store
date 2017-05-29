@@ -1,13 +1,14 @@
+appdirs==1.4.0
 dj-database-url==0.4.2
 Django==1.10
 djangorestframework==3.6.2
 gunicorn==19.7.1
 packaging==16.8
-psycopg2==2.7.1
+post==0.0.0
 pyparsing==2.1.10
 pytz==2017.2
 requests==2.13.0
-setupfiles==0.0.14
+setupfiles==0.0.0
 six==1.10.0
 virtualenv==15.1.0
 whitenoise==3.3.0

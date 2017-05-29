@@ -1,3 +1,4 @@
+//This javascript is used to switch between tabs in when clicking.
 $(function() {
 
     $('#login-form-link').click(function(e) {
