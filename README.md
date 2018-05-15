@@ -2,16 +2,6 @@
 
 **Project name: Django unchained**
 
-**Group members:**
-
-**Honain Mohib Derrar – 267615 / honain.derrar@student.tut.fi**
-
-**Mohammadali Akbarisamani – 256270 / mohammadali.akbarisamani@student.tut.fi**
-
-**Morteza Mohammadkhanbeigi – 267935 / morteza.mohammadkhanbeigi@student.tut.fi**
-
-**Pedram Ghazi – 267640 / pedram.ghazi@student.tut.fi**
-
 **Project Information:**
 
 **Name of the project: wsd17-Django Unchained**
